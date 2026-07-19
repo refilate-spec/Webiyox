@@ -1,1 +1,51 @@
 
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: sans-serif;
+    position: relative;
+    padding-bottom: 40px; /* Button ke liye jagah */
+  }
+
+  /* Fade effect wala text wrapper */
+  .text-wrapper {
+    position: relative;
+    max-height: 100px; /* Jitna height dikhana hai */
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  /* Yeh gradient effect hai jo dikhata hai ki niche text baaki hai */
+  .text-wrapper.collapsed::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(transparent, white);
+  }
+
+  .text-wrapper.expanded {
+    max-height: 1000px; /* Itna bada ki pura text dikh jaye */
+  }
+
+  /* Button ko center karne ke liye */
+  .btn-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .toggle-btn {
+    padding: 8px 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+
+
