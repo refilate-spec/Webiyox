@@ -1,34 +1,36 @@
 /* ==========================================================================
-   AGS DYNAMIC RATING ENGINE (Vanilla JavaScript Controller)
+   AGS DYNAMIC RATING ENGINE (Smart Data-Attributes Controller)
+   Ab yeh script automatically HTML ke `data-*` tags se data read kar lega!
    ========================================================================== */
 (function() {
-  // CONFIGURATION CONSTANTS (Change these values to dynamically update the entire component)
-  const ratingData = {
-    rating: 3.4,              // Control overall rating (Supports 1.0 to 5.0)
-    totalReviews: "29,383,900", // Total formatted review count string
-    reviewSubtext: "Based on verified customer ratings.",
-    badgeText: "Verified Reviews",
-    distribution: {            // Distribution breakdown percentages (must total 100)
-      5: 40,
-      4: 13.5,
-      3: 3,
-      2: 4.0,
-      1: 40.5
-    },
-    rowGradients: {
-      5: { grad: "linear-gradient(90deg, #f59e0b, #d97706)", glow: "rgba(245, 158, 11, 0.4)", color: "#f59e0b" },
-      4: { grad: "linear-gradient(90deg, #10b981, #34d399)", glow: "rgba(16, 185, 129, 0.4)", color: "#10b981" },
-      3: { grad: "linear-gradient(90deg, #0ea5e9, #22d3ee)", glow: "rgba(14, 165, 233, 0.4)", color: "#0ea5e9" },
-      2: { grad: "linear-gradient(90deg, #f97316, #fb7185)", glow: "rgba(249, 115, 22, 0.4)", color: "#f97316" },
-      1: { grad: "linear-gradient(90deg, #f43f5e, #be123c)", glow: "rgba(244, 63, 94, 0.4)", color: "#f43f5e" }
-    }
-  };
-
   const svgStarPath = '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>';
+
+  const rowGradients = {
+    5: { grad: "linear-gradient(90deg, #f59e0b, #d97706)", glow: "rgba(245, 158, 11, 0.4)", color: "#f59e0b" },
+    4: { grad: "linear-gradient(90deg, #10b981, #34d399)", glow: "rgba(16, 185, 129, 0.4)", color: "#10b981" },
+    3: { grad: "linear-gradient(90deg, #0ea5e9, #22d3ee)", glow: "rgba(14, 165, 233, 0.4)", color: "#0ea5e9" },
+    2: { grad: "linear-gradient(90deg, #f97316, #fb7185)", glow: "rgba(249, 115, 22, 0.4)", color: "#f97316" },
+    1: { grad: "linear-gradient(90deg, #f43f5e, #be123c)", glow: "rgba(244, 63, 94, 0.4)", color: "#f43f5e" }
+  };
 
   function renderRatingWidget() {
     const container = document.getElementById('ags-rating-analytics-widget');
     if (!container) return;
+
+    // Read dynamic configuration directly from HTML element data attributes
+    const ratingData = {
+      rating: parseFloat(container.getAttribute('data-rating')) || 4.5,
+      totalReviews: container.getAttribute('data-reviews') || "1,000",
+      reviewSubtext: container.getAttribute('data-subtext') || "Based on verified ratings.",
+      badgeText: container.getAttribute('data-badge') || "Verified Reviews",
+      distribution: {
+        5: parseFloat(container.getAttribute('data-d5')) || 70,
+        4: parseFloat(container.getAttribute('data-d4')) || 20,
+        3: parseFloat(container.getAttribute('data-d3')) || 5,
+        2: parseFloat(container.getAttribute('data-d2')) || 3,
+        1: parseFloat(container.getAttribute('data-d1')) || 2
+      }
+    };
 
     const r = Math.max(1, Math.min(5, ratingData.rating));
     const fullStarsCount = Math.floor(r);
@@ -68,9 +70,8 @@
     const distKeys = [5, 4, 3, 2, 1];
     distKeys.forEach((starNum, index) => {
       const percentage = ratingData.distribution[starNum] || 0;
-      const config = ratingData.rowGradients[starNum];
+      const config = rowGradients[starNum];
       
-      // Generate row mini-stars representation
       let rowStarsHtml = '';
       for (let s = 1; s <= 5; s++) {
         if (s <= starNum) {
@@ -91,7 +92,12 @@
         </div>`;
     });
 
-    // 3. Assemble Component Structure
+    // 3. Assemble Component Structure inside container
+    // We retain the outer wrapper attributes by replacing inner content
+    const existingAttrs = container.getAttribute('class');
+    const existingCmd = container.getAttribute('data-command');
+    
+    // Instead of innerHTML wipe of wrapper, we create/inject the inner card directly
     container.innerHTML = `
       <div class="rating-card" role="region" aria-label="Customer Rating Analytics">
         <div class="rating-grid">
@@ -139,6 +145,12 @@
     renderRatingWidget();
   }
 })();
+
+    
+          
+            
+            
+    
 // End js rating code card.. 
 
 // ?m=1 remove hs code start.. 
