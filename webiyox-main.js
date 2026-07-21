@@ -1,8 +1,39 @@
 /* ==========================================================================
-   AGS DYNAMIC RATING ENGINE (Smart Data-Attributes Controller)
-   Ab yeh script automatically HTML ke `data-*` tags se data read kar lega!
+   AGS ULTIMATE RATING ENGINE v6.0 (Final & Zero-Maintenance)
    ========================================================================== */
 (function() {
+  'use strict';
+
+  // 1. Auto-inject SVG Gradients & Masks silently on load (No manual SVG needed)
+  if (!document.getElementById('ags-global-svg-masks')) {
+    const svgContainer = document.createElement('div');
+    svgContainer.id = 'ags-global-svg-masks';
+    svgContainer.style.cssText = 'position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none;';
+    svgContainer.innerHTML = `
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="starGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f59e0b" />
+            <stop offset="100%" stop-color="#b45309" />
+          </linearGradient>
+          <linearGradient id="starGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fbbf24" />
+            <stop offset="100%" stop-color="#d97706" />
+          </linearGradient>
+          <linearGradient id="starGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fcd34d" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </linearGradient>
+          <linearGradient id="starGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fde68a" />
+            <stop offset="100%" stop-color="#fbbf24" />
+          </linearGradient>
+        </defs>
+      </svg>
+    `;
+    document.body.appendChild(svgContainer);
+  }
+
   const svgStarPath = '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>';
 
   const rowGradients = {
@@ -17,7 +48,7 @@
     const container = document.getElementById('ags-rating-analytics-widget');
     if (!container) return;
 
-    // Read dynamic configuration directly from HTML element data attributes
+    // Read metrics directly from post HTML attributes
     const ratingData = {
       rating: parseFloat(container.getAttribute('data-rating')) || 4.5,
       totalReviews: container.getAttribute('data-reviews') || "1,000",
@@ -38,7 +69,7 @@
     const hasFraction = fraction > 0;
     const emptyStarsCount = 5 - fullStarsCount - (hasFraction ? 1 : 0);
 
-    // 1. Generate Smart Stars HTML
+    // Stars Assembly
     let starsHtml = '';
     for (let i = 0; i < fullStarsCount; i++) {
       starsHtml += `
@@ -65,10 +96,9 @@
         </div>`;
     }
 
-    // 2. Generate Distribution Rows HTML
+    // Distribution Breakdown Bars
     let distributionHtml = '';
-    const distKeys = [5, 4, 3, 2, 1];
-    distKeys.forEach((starNum, index) => {
+    [5, 4, 3, 2, 1].forEach((starNum, index) => {
       const percentage = ratingData.distribution[starNum] || 0;
       const config = rowGradients[starNum];
       
@@ -92,17 +122,10 @@
         </div>`;
     });
 
-    // 3. Assemble Component Structure inside container
-    // We retain the outer wrapper attributes by replacing inner content
-    const existingAttrs = container.getAttribute('class');
-    const existingCmd = container.getAttribute('data-command');
-    
-    // Instead of innerHTML wipe of wrapper, we create/inject the inner card directly
+    // Final Card Rendering
     container.innerHTML = `
       <div class="rating-card" role="region" aria-label="Customer Rating Analytics">
         <div class="rating-grid">
-          
-          <!-- LEFT SECTION: Overall Score & Metrics -->
           <div class="rating-left">
             <div class="badge-row">
               <div class="verified-badge">
@@ -128,17 +151,14 @@
             <div class="rating-divider" aria-hidden="true"></div>
           </div>
 
-          <!-- RIGHT SECTION: Distribution Progress Bars -->
           <div class="rating-right">
             ${distributionHtml}
           </div>
-
         </div>
       </div>
     `;
   }
 
-  // Initialize on DOM load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderRatingWidget);
   } else {
@@ -146,11 +166,9 @@
   }
 })();
 
-    
           
+
             
-            
-    
 // End js rating code card.. 
 
 // ?m=1 remove hs code start.. 
