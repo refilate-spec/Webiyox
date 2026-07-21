@@ -1,4 +1,354 @@
+/* ==========================================================================
+   CSS STYLESHEET (Encapsulated Engine with Text & Box Shadow Support)
+   ========================================================================== */
+#ags-rating-analytics-widget {
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(226, 232, 240, 0.8);
+  --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 0 25px rgba(99, 102, 241, 0.06);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --text-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --text-shadow-glow: 0 0 12px rgba(99, 102, 241, 0.2);
+  
+  --badge-bg: rgba(99, 102, 241, 0.08);
+  --badge-text: #4f46e5;
+  --badge-border: rgba(99, 102, 241, 0.15);
+  
+  --divider-color: rgba(226, 232, 240, 0.8);
+  
+  --star-glow: rgba(245, 158, 11, 0.45);
+  --star-empty-outline: #cbd5e1;
+  --star-empty-fill: rgba(203, 213, 225, 0.15);
+  
+  --bar-bg: rgba(226, 232, 240, 0.6);
+  --glow-effect: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 1020px;
+  position: relative;
+  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: var(--text-shadow-subtle);
+}
+
+@media (prefers-color-scheme: dark) {
+  #ags-rating-analytics-widget {
+    --card-bg: rgba(15, 23, 42, 0.65);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    
+    --text-shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --text-shadow-glow: 0 0 15px rgba(129, 140, 248, 0.3);
+    
+    --badge-bg: rgba(99, 102, 241, 0.15);
+    --badge-text: #818cf8;
+    --badge-border: rgba(99, 102, 241, 0.3);
+    
+    --divider-color: rgba(255, 255, 255, 0.06);
+    
+    --star-glow: rgba(251, 191, 36, 0.5);
+    --star-empty-outline: #334155;
+    --star-empty-fill: rgba(30, 41, 59, 0.4);
+    
+    --bar-bg: rgba(30, 41, 59, 0.8);
+    --glow-effect: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+  }
+}
+
+@keyframes fillBars {
+  0% { width: 0%; opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes shimmerBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes floatGlow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-10px, 15px) scale(1.05); }
+}
+
+@keyframes starShine {
+  0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+  50% { transform: scale(1.15) rotate(8deg); filter: brightness(1.25) drop-shadow(0 0 8px var(--star-glow)); }
+  100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+}
+
+#ags-rating-analytics-widget::before,
+#ags-rating-analytics-widget::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: var(--glow-effect);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+#ags-rating-analytics-widget::before { top: -50px; left: -50px; animation: floatGlow 10s ease-in-out infinite; }
+#ags-rating-analytics-widget::after { bottom: -50px; right: -50px; animation: floatGlow 12s ease-in-out infinite reverse; }
+
+#ags-rating-analytics-widget .rating-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 26px;
+  box-shadow: var(--card-shadow), 0 0 50px rgba(0, 0, 0, 0.03);
+  padding: 48px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#ags-rating-analytics-widget .rating-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.12), 0 0 30px rgba(99, 102, 241, 0.08);
+}
+
+#ags-rating-analytics-widget .rating-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  #ags-rating-analytics-widget .rating-card { padding: 28px; }
+  #ags-rating-analytics-widget .rating-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+#ags-rating-analytics-widget .rating-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+#ags-rating-analytics-widget .badge-row { margin-bottom: 20px; }
+#ags-rating-analytics-widget .verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  color: var(--badge-text);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: none;
+}
+#ags-rating-analytics-widget .verified-badge svg { width: 12px; height: 12px; fill: currentColor; }
+
+#ags-rating-analytics-widget .score-container {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+#ags-rating-analytics-widget .score-number {
+  font-size: 72px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+}
+
+#ags-rating-analytics-widget .score-max {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+#ags-rating-analytics-widget .stars-display {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+#ags-rating-analytics-widget .star-item {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#ags-rating-analytics-widget .star-item svg {
+  width: 100%;
+  height: 100%;
+}
+
+#ags-rating-analytics-widget .star-full svg { fill: url(#starGrad1); filter: drop-shadow(0 0 6px var(--star-glow)); }
+#ags-rating-analytics-widget .star-empty svg { fill: var(--star-empty-fill); stroke: var(--star-empty-outline); stroke-width: 0.8px; }
+
+#ags-rating-analytics-widget .star-fractional {
+  position: relative;
+}
+#ags-rating-analytics-widget .star-fractional .star-base-empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  fill: var(--star-empty-fill);
+  stroke: var(--star-empty-outline);
+  stroke-width: 0.8px;
+}
+#ags-rating-analytics-widget .star-fractional-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  z-index: 2;
+  filter: drop-shadow(0 0 3px var(--star-glow));
+}
+#ags-rating-analytics-widget .star-fractional-inner svg {
+  width: 24px;
+  height: 24px;
+  fill: url(#starGrad2);
+}
+
+#ags-rating-analytics-widget .star-item:hover {
+  animation: starShine 0.6s ease forwards;
+}
+
+#ags-rating-analytics-widget .reviews-count {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: var(--text-shadow-subtle);
+}
+
+#ags-rating-analytics-widget .reviews-subtext {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+#ags-rating-analytics-widget .rating-divider {
+  width: 1px;
+  height: 100%;
+  background: var(--divider-color);
+  position: absolute;
+  right: -24px;
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  #ags-rating-analytics-widget .rating-divider {
+    width: 100%;
+    height: 1px;
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 12px 0;
+  }
+}
+
+#ags-rating-analytics-widget .rating-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#ags-rating-analytics-widget .rating-bar-row {
+  display: grid;
+  grid-template-columns: 24px 85px 1fr 45px;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s ease;
+}
+
+#ags-rating-analytics-widget .rating-bar-row:hover {
+  transform: translateX(4px);
+}
+
+#ags-rating-analytics-widget .row-number {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+  text-shadow: var(--text-shadow-subtle);
+}
+
+#ags-rating-analytics-widget .row-stars {
+  display: flex;
+  gap: 2px;
+}
+
+#ags-rating-analytics-widget .row-stars svg {
+  width: 13px;
+  height: 13px;
+}
+
+#ags-rating-analytics-widget .star-inactive-outline {
+  fill: var(--star-empty-fill) !important;
+  stroke: var(--star-empty-outline);
+  stroke-width: 1px;
+}
+
+#ags-rating-analytics-widget .bar-container {
+  background: var(--bar-bg);
+  height: 10px;
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+#ags-rating-analytics-widget .bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: var(--bar-grad);
+  box-shadow: 0 0 12px var(--bar-glow), 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  animation: fillBars 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+#ags-rating-analytics-widget .bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmerBar 2.5s infinite;
+}
+
+#ags-rating-analytics-widget .row-percentage {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: right;
+  text-shadow: var(--text-shadow-subtle);
+}
+/* End rating card code */ 
   .container {
     max-width: 600px;
     margin: 20px auto;
