@@ -1,5 +1,349 @@
 
 /* =========================================================
+   GFM GROUP DATA MANAGER v1.0
+   Unique prefix: gfm-
+   Separate from RGX Directory
+========================================================= */
+
+#gfm-manager{
+    --gfm-bg:#08090b;
+    --gfm-surface:#101216;
+    --gfm-surface2:#15171c;
+    --gfm-border:rgba(255,255,255,.09);
+    --gfm-border-h:rgba(255,255,255,.2);
+    --gfm-text:#f5f5f5;
+    --gfm-muted:#999;
+    --gfm-dim:#666;
+    --gfm-green:#25D366;
+
+    width:100%;
+    max-width:1050px;
+    margin:0 auto;
+    padding:25px 14px 50px;
+    color:var(--gfm-text);
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+#gfm-manager *,
+#gfm-manager *::before,
+#gfm-manager *::after{
+    box-sizing:border-box;
+}
+
+/* HEADER */
+
+.gfm-head{
+    margin-bottom:20px;
+}
+
+.gfm-badge{
+    display:inline-flex;
+    padding:6px 11px;
+    border:1px solid var(--gfm-border);
+    border-radius:50px;
+    background:rgba(255,255,255,.035);
+    color:#aaa;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.8px;
+    text-transform:uppercase;
+}
+
+.gfm-title{
+    margin:12px 0 5px;
+    color:#fff;
+    font-size:28px;
+}
+
+.gfm-subtitle{
+    margin:0;
+    color:var(--gfm-muted);
+    font-size:12px;
+}
+
+/* FORM */
+
+.gfm-form{
+    padding:18px;
+    border:1px solid var(--gfm-border);
+    border-radius:17px;
+    background:var(--gfm-surface);
+}
+
+.gfm-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+}
+
+.gfm-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.gfm-field-full{
+    grid-column:1/-1;
+}
+
+.gfm-label{
+    color:#aaa;
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.gfm-input,
+.gfm-select,
+.gfm-textarea{
+    width:100%;
+    border:1px solid var(--gfm-border);
+    border-radius:10px;
+    outline:none;
+    background:var(--gfm-surface2);
+    color:#fff;
+    font-size:12px;
+}
+
+.gfm-input,
+.gfm-select{
+    height:42px;
+    padding:0 12px;
+}
+
+.gfm-textarea{
+    min-height:80px;
+    padding:11px 12px;
+    resize:vertical;
+}
+
+.gfm-input:focus,
+.gfm-select:focus,
+.gfm-textarea:focus{
+    border-color:rgba(255,255,255,.28);
+    box-shadow:0 0 0 3px rgba(255,255,255,.035);
+}
+
+.gfm-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:14px;
+}
+
+.gfm-btn{
+    min-height:38px;
+    padding:0 14px;
+    border:1px solid var(--gfm-border);
+    border-radius:9px;
+    background:var(--gfm-surface2);
+    color:#ddd;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:700;
+}
+
+.gfm-btn:hover{
+    border-color:var(--gfm-border-h);
+}
+
+.gfm-btn-primary{
+    border-color:#fff;
+    background:#fff;
+    color:#000;
+}
+
+/* SEARCH */
+
+.gfm-toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin:20px 0 12px;
+}
+
+.gfm-search{
+    flex:1;
+}
+
+.gfm-count{
+    flex:0 0 auto;
+    color:#666;
+    font-size:11px;
+}
+
+/* TABLE */
+
+.gfm-table-wrap{
+    overflow:auto;
+    border:1px solid var(--gfm-border);
+    border-radius:15px;
+    background:var(--gfm-surface);
+}
+
+.gfm-table{
+    width:100%;
+    min-width:760px;
+    border-collapse:collapse;
+}
+
+.gfm-table th{
+    padding:12px;
+    border-bottom:1px solid var(--gfm-border);
+    background:rgba(255,255,255,.025);
+    color:#777;
+    font-size:9px;
+    text-align:left;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.gfm-table td{
+    padding:12px;
+    border-bottom:1px solid rgba(255,255,255,.055);
+    color:#ccc;
+    font-size:11px;
+    vertical-align:middle;
+}
+
+.gfm-table tr:last-child td{
+    border-bottom:0;
+}
+
+.gfm-name{
+    color:#fff;
+    font-weight:700;
+}
+
+.gfm-platform{
+    color:#aaa;
+}
+
+.gfm-status{
+    display:inline-flex;
+    padding:4px 8px;
+    border-radius:50px;
+    background:rgba(74,222,128,.07);
+    color:#4ade80;
+    font-size:9px;
+    font-weight:700;
+}
+
+.gfm-row-actions{
+    display:flex;
+    gap:5px;
+}
+
+.gfm-small-btn{
+    padding:6px 8px;
+    border:1px solid var(--gfm-border);
+    border-radius:7px;
+    background:#15171c;
+    color:#aaa;
+    cursor:pointer;
+    font-size:9px;
+}
+
+.gfm-small-btn:hover{
+    color:#fff;
+    border-color:var(--gfm-border-h);
+}
+
+.gfm-delete{
+    color:#ff7070;
+}
+
+/* OUTPUT */
+
+.gfm-output{
+    margin-top:18px;
+    padding:16px;
+    border:1px solid var(--gfm-border);
+    border-radius:15px;
+    background:#0d0f12;
+}
+
+.gfm-output-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.gfm-output-title{
+    color:#ddd;
+    font-size:12px;
+    font-weight:700;
+}
+
+.gfm-code{
+    width:100%;
+    min-height:230px;
+    padding:13px;
+    border:1px solid var(--gfm-border);
+    border-radius:10px;
+    outline:none;
+    resize:vertical;
+    background:#070809;
+    color:#b9ffcf;
+    font-family:
+        Consolas,
+        Monaco,
+        monospace;
+    font-size:11px;
+    line-height:1.55;
+}
+
+/* EMPTY */
+
+.gfm-empty{
+    padding:35px 20px;
+    text-align:center;
+    color:#666;
+    font-size:11px;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    #gfm-manager{
+        padding:20px 10px 40px;
+    }
+
+    .gfm-grid{
+        grid-template-columns:1fr;
+    }
+
+    .gfm-field-full{
+        grid-column:auto;
+    }
+
+    .gfm-toolbar{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .gfm-count{
+        order:-1;
+    }
+
+    .gfm-title{
+        font-size:24px;
+    }
+
+}
+
+/* =========================================================
    RGX GROUP DIRECTORY v1.0
    Unique prefix: rgx-
    No body / global selectors
