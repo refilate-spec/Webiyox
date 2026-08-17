@@ -317,3 +317,439 @@ rgxStats();
 rgxRender();
 
 })();
+
+
+
+  
+  // form group filler code start javascript
+(function(){
+
+"use strict";
+
+
+/* =========================================================
+   GFM DATA
+========================================================= */
+
+let gfmData=[];
+
+let gfmEditIndex=-1;
+
+
+/* ELEMENTS */
+
+const gfmForm=
+    document.getElementById("gfm-form");
+
+const gfmName=
+    document.getElementById("gfm-name");
+
+const gfmPlatform=
+    document.getElementById("gfm-platform");
+
+const gfmCategory=
+    document.getElementById("gfm-category");
+
+const gfmMembers=
+    document.getElementById("gfm-members");
+
+const gfmDescription=
+    document.getElementById("gfm-description");
+
+const gfmUrl=
+    document.getElementById("gfm-url");
+
+const gfmStatus=
+    document.getElementById("gfm-status");
+
+const gfmBody=
+    document.getElementById("gfm-table-body");
+
+const gfmEmpty=
+    document.getElementById("gfm-empty");
+
+const gfmSearch=
+    document.getElementById("gfm-search");
+
+const gfmCount=
+    document.getElementById("gfm-count");
+
+const gfmCode=
+    document.getElementById("gfm-code");
+
+const gfmSubmit=
+    document.getElementById("gfm-submit");
+
+
+/* LOAD */
+
+try{
+
+    const saved=
+        localStorage.getItem("gfm_groups");
+
+    if(saved){
+        gfmData=JSON.parse(saved);
+    }
+
+}catch(error){
+
+    gfmData=[];
+
+}
+
+
+/* SAVE */
+
+function gfmSave(){
+
+    localStorage.setItem(
+        "gfm_groups",
+        JSON.stringify(gfmData)
+    );
+
+}
+
+
+/* ESCAPE */
+
+function gfmEscape(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* RENDER TABLE */
+
+function gfmRender(){
+
+    const query=
+        gfmSearch.value
+        .trim()
+        .toLowerCase();
+
+    const filtered=
+        gfmData.filter(item=>{
+
+            return(
+                item.name.toLowerCase().includes(query) ||
+                item.platform.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query)
+            );
+
+        });
+
+
+    gfmBody.innerHTML="";
+
+
+    filtered.forEach((item,index)=>{
+
+        const realIndex=
+            gfmData.indexOf(item);
+
+        const row=
+            document.createElement("tr");
+
+        row.innerHTML=`
+
+            <td>${index+1}</td>
+
+            <td>
+                <span class="gfm-name">
+                    ${gfmEscape(item.name)}
+                </span>
+            </td>
+
+            <td>
+                <span class="gfm-platform">
+                    ${gfmEscape(item.platform)}
+                </span>
+            </td>
+
+            <td>
+                ${gfmEscape(item.category)}
+            </td>
+
+            <td>
+                ${Number(item.members).toLocaleString()}
+            </td>
+
+            <td>
+                <span class="gfm-status">
+                    ${gfmEscape(item.status)}
+                </span>
+            </td>
+
+            <td>
+
+                <div class="gfm-row-actions">
+
+                    <button
+                        class="gfm-small-btn"
+                        data-gfm-edit="${realIndex}"
+                        type="button"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="gfm-small-btn gfm-delete"
+                        data-gfm-delete="${realIndex}"
+                        type="button"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+        `;
+
+        gfmBody.appendChild(row);
+
+    });
+
+
+    gfmEmpty.style.display=
+        filtered.length ? "none" : "block";
+
+    gfmCount.textContent=
+        `${gfmData.length} ${
+            gfmData.length===1
+            ? "Group"
+            : "Groups"
+        }`;
+
+    gfmGenerate();
+
+}
+
+
+/* ADD / EDIT */
+
+gfmForm.addEventListener(
+    "submit",
+    function(event){
+
+        event.preventDefault();
+
+
+        const item={
+
+            name:gfmName.value.trim(),
+
+            platform:gfmPlatform.value,
+
+            category:gfmCategory.value.trim(),
+
+            members:Number(gfmMembers.value)||0,
+
+            description:gfmDescription.value.trim(),
+
+            url:gfmUrl.value.trim(),
+
+            status:gfmStatus.value
+
+        };
+
+
+        if(gfmEditIndex===-1){
+
+            gfmData.push(item);
+
+        }else{
+
+            gfmData[gfmEditIndex]=item;
+
+            gfmEditIndex=-1;
+
+            gfmSubmit.textContent="+ Add Group";
+
+        }
+
+
+        gfmSave();
+
+        gfmForm.reset();
+
+        gfmRender();
+
+    }
+);
+
+
+/* RESET */
+
+document
+.getElementById("gfm-reset")
+.addEventListener(
+    "click",
+    function(){
+
+        gfmEditIndex=-1;
+
+        gfmSubmit.textContent="+ Add Group";
+
+        gfmForm.reset();
+
+    }
+);
+
+
+/* TABLE ACTIONS */
+
+gfmBody.addEventListener(
+    "click",
+    function(event){
+
+        const edit=
+            event.target.dataset.gfmEdit;
+
+        const del=
+            event.target.dataset.gfmDelete;
+
+
+        /* EDIT */
+
+        if(edit!==undefined){
+
+            const item=
+                gfmData[Number(edit)];
+
+            if(!item) return;
+
+
+            gfmEditIndex=
+                Number(edit);
+
+            gfmName.value=
+                item.name;
+
+            gfmPlatform.value=
+                item.platform;
+
+            gfmCategory.value=
+                item.category;
+
+            gfmMembers.value=
+                item.members;
+
+            gfmDescription.value=
+                item.description;
+
+            gfmUrl.value=
+                item.url;
+
+            gfmStatus.value=
+                item.status;
+
+            gfmSubmit.textContent=
+                "Update Group";
+
+            gfmForm.scrollIntoView({
+                behavior:"smooth",
+                block:"start"
+            });
+
+        }
+
+
+        /* DELETE */
+
+        if(del!==undefined){
+
+            const index=
+                Number(del);
+
+            if(!confirm(
+                "Delete this group?"
+            )) return;
+
+
+            gfmData.splice(index,1);
+
+            gfmSave();
+
+            gfmRender();
+
+        }
+
+    }
+);
+
+
+/* SEARCH */
+
+gfmSearch.addEventListener(
+    "input",
+    gfmRender
+);
+
+
+/* GENERATE DIRECTORY DATA */
+
+function gfmGenerate(){
+
+    const output=
+`const groups = ${JSON.stringify(
+    gfmData,
+    null,
+    4
+)};`;
+
+    gfmCode.value=output;
+
+}
+
+
+/* COPY */
+
+document
+.getElementById("gfm-copy")
+.addEventListener(
+    "click",
+    async function(){
+
+        try{
+
+            await navigator.clipboard.writeText(
+                gfmCode.value
+            );
+
+            this.textContent="Copied!";
+
+            setTimeout(()=>{
+                this.textContent="Copy Data";
+            },1500);
+
+        }catch(error){
+
+            gfmCode.select();
+
+            document.execCommand("copy");
+
+            this.textContent="Copied!";
+
+            setTimeout(()=>{
+                this.textContent="Copy Data";
+            },1500);
+
+        }
+
+    }
+);
+
+
+/* INIT */
+
+gfmRender();
+
+})();
